@@ -1,0 +1,1973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEasy - Online Shopping</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        :root {
+            --primary: #232f3e;
+            --secondary: #ff9900;
+            --light: #f0f2f2;
+            --dark: #000;
+            --gray: #767676;
+            --light-gray: #f8f8f8;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .navbar-custom {
+            background-color: var(--primary) !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            color: var(--secondary) !important;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .nav-link {
+            color: white !important;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--secondary) !important;
+        }
+
+        .cart-badge {
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 5px;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(255, 99, 132, 0.8), rgba(255, 159, 64, 0.8), rgba(255, 205, 86, 0.8)), 
+                        url('summer.jpg') center/cover;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(255, 99, 132, 0.3) 0%, 
+                rgba(255, 159, 64, 0.3) 25%, 
+                rgba(255, 205, 86, 0.3) 50%, 
+                rgba(75, 192, 192, 0.3) 75%, 
+                rgba(54, 162, 235, 0.3) 100%);
+            animation: gradientShift 8s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .summer-badge {
+            background: linear-gradient(45deg, #ff6b6b, #ffa726);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: inline-block;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            position: relative;
+            height: 100%;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #ff4d4d;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 1;
+        }
+
+        .product-image {
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.1);
+        }
+
+        .product-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .product-card:hover .product-image::after {
+            opacity: 1;
+        }
+
+        .btn-primary-custom {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-primary-custom:hover {
+            background-color: #e68a00;
+            border-color: #e68a00;
+        }
+
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .category-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            transition: transform 0.3s;
+            cursor: pointer;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            background-color: var(--light-gray);
+        }
+
+        .category-card i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .swiper-slide {
+            height: auto;
+        }
+
+        .footer-custom {
+            background-color: var(--primary);
+            color: white;
+            margin-top: 50px;
+        }
+
+        .cart-item {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .filter-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#" onclick="showPage('home')">
+                <i class="fas fa-shopping-bag me-2"></i>ShopEasy
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('home')">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('products')">
+                            <i class="fas fa-th-large me-1"></i>Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('about')">
+                            <i class="fas fa-info-circle me-1"></i>About
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Search Bar in Navbar -->
+                <div class="d-flex me-3">
+                    <input type="text" class="form-control me-2" id="navbar-search" placeholder="Search products..." style="width: 200px;" onkeyup="handleNavbarSearch(event)">
+                    <button class="btn btn-outline-light" onclick="performNavbarSearch()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showCart()">
+                            <i class="fas fa-shopping-cart me-1"></i>Cart
+                            <span class="cart-badge" id="cart-count">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="login-nav" style="display: block;">
+                        <a class="nav-link" href="#" onclick="showPage('login')">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                    </li>
+                    <li class="nav-item" id="logout-nav" style="display: none;">
+                        <a class="nav-link" href="#" onclick="logout()">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Page -->
+    <div id="login-page" class="page-section">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="text-center mb-4">
+                    <h2 class="text-primary">Welcome to ShopEasy</h2>
+                    <p class="text-muted">Sign in to your account</p>
+                </div>
+                
+                <form id="login-form">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" required>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="remember">
+                        <label class="form-check-label" for="remember">Remember me</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary-custom w-100 mb-3">Sign In</button>
+                    
+                    <div class="text-center">
+                        <p class="text-muted">Don't have an account? 
+                            <a href="#" onclick="showRegister()" class="text-primary">Sign up</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Page -->
+    <div id="register-page" class="page-section">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="text-center mb-4">
+                    <h2 class="text-primary">Create Account</h2>
+                    <p class="text-muted">Join ShopEasy today</p>
+                </div>
+                
+                <form id="register-form">
+                    <div class="mb-3">
+                        <label for="reg-name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="reg-name" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="reg-email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="reg-email" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="reg-password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="reg-password" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="reg-confirm-password" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" id="reg-confirm-password" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary-custom w-100 mb-3">Create Account</button>
+                    
+                    <div class="text-center">
+                        <p class="text-muted">Already have an account? 
+                            <a href="#" onclick="showLogin()" class="text-primary">Sign in</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Home Page -->
+    <div id="home-page" class="page-section active">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="summer-badge">
+                        <i class="fas fa-fire me-2"></i>SUMMER SALE 2024
+                    </div>
+                    <h1 class="display-3 fw-bold mb-3">Massive Summer Sale!</h1>
+                    <p class="lead mb-4 fs-4">Up to 70% off on thousands of items</p>
+                    <p class="mb-4">Don't miss out on the biggest sale of the year! Limited time offer.</p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <button class="btn btn-primary-custom btn-lg px-4 py-3" onclick="showPage('products')">
+                            <i class="fas fa-shopping-bag me-2"></i>Shop Now
+                        </button>
+                        <button class="btn btn-outline-light btn-lg px-4 py-3" onclick="filterProducts('electronics')">
+                            <i class="fas fa-laptop me-2"></i>Electronics
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="container mb-5">
+            <h2 class="text-center mb-4">Shop by Category</h2>
+            <div class="row g-4">
+                <div class="col-md-2 col-sm-4 col-6">
+                    <div class="category-card" onclick="filterProducts('electronics')">
+                        <i class="fas fa-laptop"></i>
+                        <h6>Electronics</h6>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-4 col-6">
+                    <div class="category-card" onclick="filterProducts('fashion')">
+                        <i class="fas fa-tshirt"></i>
+                        <h6>Fashion</h6>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-4 col-6">
+                    <div class="category-card" onclick="filterProducts('home')">
+                        <i class="fas fa-home"></i>
+                        <h6>Home & Kitchen</h6>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-4 col-6">
+                    <div class="category-card" onclick="filterProducts('books')">
+                        <i class="fas fa-book"></i>
+                        <h6>Books</h6>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-4 col-6">
+                    <div class="category-card" onclick="filterProducts('health')">
+                        <i class="fas fa-heartbeat"></i>
+                        <h6>Health</h6>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-4 col-6">
+                    <div class="category-card" onclick="filterProducts('gaming')">
+                        <i class="fas fa-gamepad"></i>
+                        <h6>Gaming</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Products Swiper -->
+        <div class="container mb-5">
+            <h2 class="text-center mb-4">Featured Products</h2>
+            <div class="swiper featured-swiper">
+                <div class="swiper-wrapper" id="featured-products">
+                    <!-- Products will be loaded here -->
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+
+        <!-- Deals of the Day -->
+        <div class="container mb-5">
+            <h2 class="text-center mb-4">Deals of the Day</h2>
+            <div class="swiper deals-swiper">
+                <div class="swiper-wrapper" id="deals-products">
+                    <!-- Products will be loaded here -->
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Page -->
+    <div id="about-page" class="page-section">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body p-5">
+                            <div class="text-center mb-5">
+                                <h1 class="display-4 text-primary mb-3">About ShopEasy</h1>
+                                <div class="border-bottom border-primary border-3 mx-auto" style="width: 100px;"></div>
+                            </div>
+                            
+                            <div class="row mb-5">
+                                <div class="col-md-6">
+                                    <h3 class="text-primary mb-3">Our Mission</h3>
+                                    <p class="lead">
+                                        ShopEasy is designed to provide a seamless and enjoyable online shopping experience 
+                                        for customers across Egypt. We believe in making quality products accessible to everyone 
+                                        with competitive prices and excellent customer service.
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h3 class="text-primary mb-3">Our Vision</h3>
+                                    <p class="lead">
+                                        To become Egypt's leading e-commerce platform, connecting customers with the best 
+                                        products from trusted sellers while maintaining the highest standards of quality, 
+                                        security, and customer satisfaction.
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-5">
+                                <div class="col-12">
+                                    <h3 class="text-primary mb-3">What We Offer</h3>
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <div class="text-center">
+                                                <i class="fas fa-shopping-cart fa-3x text-primary mb-3"></i>
+                                                <h5>Easy Shopping</h5>
+                                                <p>Intuitive interface with advanced filtering and search capabilities</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <div class="text-center">
+                                                <i class="fas fa-shield-alt fa-3x text-primary mb-3"></i>
+                                                <h5>Secure Transactions</h5>
+                                                <p>Safe and secure payment processing for all your purchases</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <div class="text-center">
+                                                <i class="fas fa-truck fa-3x text-primary mb-3"></i>
+                                                <h5>Fast Delivery</h5>
+                                                <p>Quick and reliable delivery service across Nigeria</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-5">
+                                <div class="col-12">
+                                    <h3 class="text-primary mb-3">Our Categories</h3>
+                                    <div class="row">
+                                        <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                            <div class="text-center">
+                                                <i class="fas fa-laptop fa-2x text-secondary mb-2"></i>
+                                                <small>Electronics</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                            <div class="text-center">
+                                                <i class="fas fa-tshirt fa-2x text-secondary mb-2"></i>
+                                                <small>Fashion</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                            <div class="text-center">
+                                                <i class="fas fa-home fa-2x text-secondary mb-2"></i>
+                                                <small>Home & Kitchen</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                            <div class="text-center">
+                                                <i class="fas fa-book fa-2x text-secondary mb-2"></i>
+                                                <small>Books</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                            <div class="text-center">
+                                                <i class="fas fa-heartbeat fa-2x text-secondary mb-2"></i>
+                                                <small>Health</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-4 col-6 mb-3">
+                                            <div class="text-center">
+                                                <i class="fas fa-gamepad fa-2x text-secondary mb-2"></i>
+                                                <small>Gaming</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center">
+                                <div class="bg-light p-4 rounded">
+                                    <h4 class="text-primary mb-3">Developed by</h4>
+                                    <h2 class="text-dark mb-2">Engineer Youssef Maged</h2>
+                                    <p class="text-muted mb-0">
+                                        A passionate software engineer dedicated to creating innovative e-commerce solutions 
+                                        that enhance the online shopping experience for users worldwide.
+                                    </p>
+                                    <div class="mt-3">
+                                        <i class="fas fa-code text-primary me-2"></i>
+                                        <i class="fas fa-laptop-code text-primary me-2"></i>
+                                        <i class="fas fa-mobile-alt text-primary"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Page -->
+    <div id="products-page" class="page-section">
+        <div class="container mt-4">
+            <div class="row">
+                <!-- Filters -->
+                <div class="col-md-3">
+                    <div class="filter-section">
+                        <h5>Filters</h5>
+                        <div class="mb-3">
+                            <label class="form-label">Category</label>
+                            <select class="form-select" id="category-filter" onchange="applyFilters()">
+                                <option value="">All Categories</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="fashion">Fashion</option>
+                                <option value="home">Home & Kitchen</option>
+                                <option value="books">Books</option>
+                                <option value="health">Health</option>
+                                <option value="gaming">Gaming</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Price Range</label>
+                            <select class="form-select" id="price-filter" onchange="applyFilters()">
+                                <option value="">All Prices</option>
+                                <option value="0-50">Under $50</option>
+                                <option value="50-200">$50 - $200</option>
+                                <option value="200-500">$200 - $500</option>
+                                <option value="500+">Above $500</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Sort By</label>
+                            <select class="form-select" id="sort-filter" onchange="applyFilters()">
+                                <option value="name-asc">Name: A to Z</option>
+                                <option value="name-desc">Name: Z to A</option>
+                            </select>
+                        </div>
+                        
+                        <button class="btn btn-outline-secondary w-100" onclick="clearFilters()">Clear Filters</button>
+                    </div>
+                </div>
+                
+                <!-- Products Grid -->
+                <div class="col-md-9">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4>All Products</h4>
+                        <div class="d-flex align-items-center">
+                            <input type="text" class="form-control me-2" id="search-input" placeholder="Search products..." onkeyup="applyFilters()">
+                            <button class="btn btn-primary-custom" onclick="applyFilters()">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-grid" id="products-grid">
+                        <!-- Product 1 -->
+                        <div class="product-card" data-category="electronics" data-price="459.99" data-rating="4.5">
+                            <div class="product-badge">30% OFF</div>
+                            <div class="product-image">
+                                <img src="phone.jpg" alt="Latest Smartphone with 128GB Storage">
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title">Latest Smartphone with 128GB Storage</h6>
+                                <div class="mb-2">
+                                    <span class="h5 text-primary">$459.99</span>
+                                    <small class="text-muted text-decoration-line-through ms-2">$659.99</small>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="text-warning">★★★★☆ <small class="text-muted ms-1">(1234)</small></div>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-secondary">TechCorp</small>
+                                </div>
+                                <button class="btn btn-primary-custom w-100" onclick="addToCart(1)">
+                                    <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product 2 -->
+                        <div class="product-card" data-category="electronics" data-price="1259.99" data-rating="4.8">
+                            <div class="product-badge">20% OFF</div>
+                            <div class="product-image">
+                                <img src="laptop.jpg" alt="Gaming Laptop with RTX Graphics">
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title">Gaming Laptop with RTX Graphics</h6>
+                                <div class="mb-2">
+                                    <span class="h5 text-primary">$1,259.99</span>
+                                    <small class="text-muted text-decoration-line-through ms-2">$1,599.99</small>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="text-warning">★★★★★ <small class="text-muted ms-1">(892)</small></div>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-secondary">GameTech</small>
+                                </div>
+                                <button class="btn btn-primary-custom w-100" onclick="addToCart(2)">
+                                    <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product 3 -->
+                        <div class="product-card" data-category="electronics" data-price="129.99" data-rating="4.3">
+                            <div class="product-badge">32% OFF</div>
+                            <div class="product-image">
+                                <img src="headphones.jpg" alt="Wireless Noise Cancelling Headphones">
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title">Wireless Noise Cancelling Headphones</h6>
+                                <div class="mb-2">
+                                    <span class="h5 text-primary">$129.99</span>
+                                    <small class="text-muted text-decoration-line-through ms-2">$189.99</small>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="text-warning">★★★★☆ <small class="text-muted ms-1">(2456)</small></div>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-secondary">SoundMax</small>
+                                </div>
+                                <button class="btn btn-primary-custom w-100" onclick="addToCart(3)">
+                                    <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product 4 -->
+                        <div class="product-card" data-category="electronics" data-price="89.99" data-rating="4.2">
+                            <div class="product-badge">30% OFF</div>
+                            <div class="product-image">
+                                <img src="smart watch.jpg" alt="Smart Watch with Health Monitoring">
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title">Smart Watch with Health Monitoring</h6>
+                                <div class="mb-2">
+                                    <span class="h5 text-primary">$89.99</span>
+                                    <small class="text-muted text-decoration-line-through ms-2">$129.99</small>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="text-warning">★★★★☆ <small class="text-muted ms-1">(1678)</small></div>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-secondary">HealthTech</small>
+                                </div>
+                                <button class="btn btn-primary-custom w-100" onclick="addToCart(4)">
+                                    <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product 5 -->
+                        <div class="product-card" data-category="electronics" data-price="359.99" data-rating="4.7">
+                            <div class="product-badge">28% OFF</div>
+                            <div class="product-image">
+                                <img src="camera.jpg" alt="Digital Camera with 4K Video">
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title">Digital Camera with 4K Video</h6>
+                                <div class="mb-2">
+                                    <span class="h5 text-primary">$359.99</span>
+                                    <small class="text-muted text-decoration-line-through ms-2">$499.99</small>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="text-warning">★★★★★ <small class="text-muted ms-1">(987)</small></div>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-secondary">PhotoPro</small>
+                                </div>
+                                <button class="btn btn-primary-custom w-100" onclick="addToCart(5)">
+                                    <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product 6 -->
+                        <div class="product-card" data-category="electronics" data-price="289.99" data-rating="4.4">
+                            <div class="product-badge">28% OFF</div>
+                            <div class="product-image">
+                                <img src="tablet.jpg" alt="Tablet with Stylus and 128GB Storage">
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title">Tablet with Stylus and 128GB Storage</h6>
+                                <div class="mb-2">
+                                    <span class="h5 text-primary">$289.99</span>
+                                    <small class="text-muted text-decoration-line-through ms-2">$399.99</small>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="text-warning">★★★★☆ <small class="text-muted ms-1">(1345)</small></div>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-secondary">TabletPro</small>
+                                </div>
+                                <button class="btn btn-primary-custom w-100" onclick="addToCart(6)">
+                                    <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product 7 -->
+                        <div class="product-card" data-category="electronics" data-price="49.99" data-rating="4.1">
+                            <div class="product-badge">38% OFF</div>
+                            <div class="product-image">
+                                <img src="speakers.jpg" alt="Bluetooth Portable Speaker">
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title">Bluetooth Portable Speaker</h6>
+                                <div class="mb-2">
+                                    <span class="h5 text-primary">$49.99</span>
+                                    <small class="text-muted text-decoration-line-through ms-2">$79.99</small>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="text-warning">★★★★☆ <small class="text-muted ms-1">(2123)</small></div>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-secondary">AudioMax</small>
+                                </div>
+                                <button class="btn btn-primary-custom w-100" onclick="addToCart(7)">
+                                    <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product 8 -->
+                        <div class="product-card" data-category="books" data-price="29.99" data-rating="4.6">
+                            <div class="product-badge">40% OFF</div>
+                            <div class="product-image">
+                                <img src="book.jpg" alt="Bestseller Novel Collection">
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title">Bestseller Novel Collection</h6>
+                                <div class="mb-2">
+                                    <span class="h5 text-primary">$29.99</span>
+                                    <small class="text-muted text-decoration-line-through ms-2">$49.99</small>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="text-warning">★★★★★ <small class="text-muted ms-1">(3456)</small></div>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-secondary">BookWorld</small>
+                                </div>
+                                <button class="btn btn-primary-custom w-100" onclick="addToCart(8)">
+                                    <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product 9 -->
+                        <div class="product-card" data-category="fashion" data-price="19.99" data-rating="4.0">
+                            <div class="product-badge">50% OFF</div>
+                            <div class="product-image">
+                                <img src="shirt.jpg" alt="Premium Cotton T-Shirt Pack">
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title">Premium Cotton T-Shirt Pack</h6>
+                                <div class="mb-2">
+                                    <span class="h5 text-primary">$19.99</span>
+                                    <small class="text-muted text-decoration-line-through ms-2">$39.99</small>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="text-warning">★★★★☆ <small class="text-muted ms-1">(5678)</small></div>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-secondary">StyleCo</small>
+                                </div>
+                                <button class="btn btn-primary-custom w-100" onclick="addToCart(9)">
+                                    <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product 10 -->
+                        <div class="product-card" data-category="home" data-price="159.99" data-rating="4.5">
+                            <div class="product-badge">36% OFF</div>
+                            <div class="product-image">
+                                <img src="kitchin.jpg" alt="Stainless Steel Cookware Set">
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title">Stainless Steel Cookware Set</h6>
+                                <div class="mb-2">
+                                    <span class="h5 text-primary">$159.99</span>
+                                    <small class="text-muted text-decoration-line-through ms-2">$249.99</small>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="text-warning">★★★★★ <small class="text-muted ms-1">(1234)</small></div>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-secondary">KitchenPro</small>
+                                </div>
+                                <button class="btn btn-primary-custom w-100" onclick="addToCart(10)">
+                                    <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product 11 -->
+                        <div class="product-card" data-category="health" data-price="69.99" data-rating="4.3">
+                            <div class="product-badge">30% OFF</div>
+                            <div class="product-image">
+                                <img src="fitness.jpg" alt="Fitness Tracker with Heart Rate Monitor">
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title">Fitness Tracker with Heart Rate Monitor</h6>
+                                <div class="mb-2">
+                                    <span class="h5 text-primary">$69.99</span>
+                                    <small class="text-muted text-decoration-line-through ms-2">$99.99</small>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="text-warning">★★★★☆ <small class="text-muted ms-1">(2345)</small></div>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-secondary">FitTech</small>
+                                </div>
+                                <button class="btn btn-primary-custom w-100" onclick="addToCart(11)">
+                                    <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product 12 -->
+                        <div class="product-card" data-category="gaming" data-price="24.99" data-rating="4.2">
+                            <div class="product-badge">50% OFF</div>
+                            <div class="product-image">
+                                <img src="mouse.jpg" alt="Wireless Gaming Mouse">
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title">Wireless Gaming Mouse</h6>
+                                <div class="mb-2">
+                                    <span class="h5 text-primary">$24.99</span>
+                                    <small class="text-muted text-decoration-line-through ms-2">$49.99</small>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="text-warning">★★★★☆ <small class="text-muted ms-1">(1890)</small></div>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-secondary">GameGear</small>
+                                </div>
+                                <button class="btn btn-primary-custom w-100" onclick="addToCart(12)">
+                                    <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal fade" id="cartModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Your Shopping Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="cart-items">
+                    <!-- Cart items will be loaded here -->
+                </div>
+                <div class="modal-footer">
+                    <div class="w-100">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">$0.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Shipping:</span>
+                            <span id="shipping">$0.00</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-3">
+                            <strong>Total:</strong>
+                            <strong id="total">$0.00</strong>
+                        </div>
+                        <button class="btn btn-primary-custom w-100" onclick="checkout()">Proceed to Checkout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-custom py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>Get to Know Us</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">Careers</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">About ShopEasy</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Investor Relations</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Make Money with Us</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">Sell products</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Become an Affiliate</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Payment Products</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">Gift Cards</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Store Credit</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Let Us Help You</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light text-decoration-none">Your Account</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Your Orders</a></li>
+                        <li><a href="#" class="text-light text-decoration-none">Shipping Rates</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p>&copy; 2023 ShopEasy. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let featuredSwiper, dealsSwiper;
+
+        // Products array for cart functionality - USD prices
+        const products = [
+            {
+                id: 1,
+                title: "Latest Smartphone with 128GB Storage",
+                price: 459.99,
+                oldPrice: 659.99,
+                rating: 4.5,
+                reviews: 1234,
+                image: "phone.jpg",
+                category: "electronics",
+                discount: 30,
+                description: "High-performance smartphone with advanced camera system and long-lasting battery",
+                inStock: true,
+                brand: "TechCorp"
+            },
+            {
+                id: 2,
+                title: "Gaming Laptop with RTX Graphics",
+                price: 1259.99,
+                oldPrice: 1599.99,
+                rating: 4.8,
+                reviews: 892,
+                image: "laptop.jpg",
+                category: "electronics",
+                discount: 20,
+                description: "Powerful gaming laptop with RTX graphics card for ultimate gaming experience",
+                inStock: true,
+                brand: "GameTech"
+            },
+            {
+                id: 3,
+                title: "Wireless Noise Cancelling Headphones",
+                price: 129.99,
+                oldPrice: 189.99,
+                rating: 4.3,
+                reviews: 2456,
+                image: "headphones.jpg",
+                category: "electronics",
+                discount: 32,
+                description: "Premium wireless headphones with active noise cancellation technology",
+                inStock: true,
+                brand: "SoundMax"
+            },
+            {
+                id: 4,
+                title: "Smart Watch with Health Monitoring",
+                price: 89.99,
+                oldPrice: 129.99,
+                rating: 4.2,
+                reviews: 1678,
+                image: "smart watch.jpg",
+                category: "electronics",
+                discount: 30,
+                description: "Advanced smartwatch with comprehensive health and fitness tracking",
+                inStock: true,
+                brand: "HealthTech"
+            },
+            {
+                id: 5,
+                title: "Digital Camera with 4K Video",
+                price: 359.99,
+                oldPrice: 499.99,
+                rating: 4.7,
+                reviews: 987,
+                image: "camera.jpg",
+                category: "electronics",
+                discount: 28,
+                description: "Professional digital camera with 4K video recording capabilities",
+                inStock: true,
+                brand: "PhotoPro"
+            },
+            {
+                id: 6,
+                title: "Tablet with Stylus and 128GB Storage",
+                price: 289.99,
+                oldPrice: 399.99,
+                rating: 4.4,
+                reviews: 1345,
+                image: "tablet.jpg",
+                category: "electronics",
+                discount: 28,
+                description: "Versatile tablet with precision stylus for creative professionals",
+                inStock: true,
+                brand: "TabletPro"
+            },
+            {
+                id: 7,
+                title: "Bluetooth Portable Speaker",
+                price: 49.99,
+                oldPrice: 79.99,
+                rating: 4.1,
+                reviews: 2123,
+                image: "speakers.jpg",
+                category: "electronics",
+                discount: 38,
+                description: "Compact wireless speaker with crystal clear sound quality",
+                inStock: true,
+                brand: "AudioMax"
+            },
+            {
+                id: 8,
+                title: "Bestseller Novel Collection",
+                price: 29.99,
+                oldPrice: 49.99,
+                rating: 4.6,
+                reviews: 3456,
+                image: "book.jpg",
+                category: "books",
+                discount: 40,
+                description: "Collection of bestselling novels from award-winning authors",
+                inStock: true,
+                brand: "BookWorld"
+            },
+            {
+                id: 9,
+                title: "Premium Cotton T-Shirt Pack",
+                price: 19.99,
+                oldPrice: 39.99,
+                rating: 4.0,
+                reviews: 5678,
+                image: "shirt.jpg",
+                category: "fashion",
+                discount: 50,
+                description: "Comfortable premium cotton t-shirts in various colors",
+                inStock: true,
+                brand: "StyleCo"
+            },
+            {
+                id: 10,
+                title: "Stainless Steel Cookware Set",
+                price: 159.99,
+                oldPrice: 249.99,
+                rating: 4.5,
+                reviews: 1234,
+                image: "kitchin.jpg",
+                category: "home",
+                discount: 36,
+                description: "Professional-grade stainless steel cookware set for your kitchen",
+                inStock: true,
+                brand: "KitchenPro"
+            },
+            {
+                id: 11,
+                title: "Fitness Tracker with Heart Rate Monitor",
+                price: 69.99,
+                oldPrice: 99.99,
+                rating: 4.3,
+                reviews: 2345,
+                image: "fitness.jpg",
+                category: "health",
+                discount: 30,
+                description: "Advanced fitness tracker with accurate heart rate monitoring",
+                inStock: true,
+                brand: "FitTech"
+            },
+            {
+                id: 12,
+                title: "Wireless Gaming Mouse",
+                price: 24.99,
+                oldPrice: 49.99,
+                rating: 4.2,
+                reviews: 1890,
+                image: "mouse.jpg",
+                category: "gaming",
+                discount: 50,
+                description: "High-precision wireless gaming mouse with customizable RGB lighting",
+                inStock: true,
+                brand: "GameGear"
+            }
+        ];
+
+        // Authentication functions
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page-section').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId + '-page').classList.add('active');
+            
+            // Load page-specific content
+            if (pageId === 'home') {
+                loadHomePage();
+            } else if (pageId === 'products') {
+                loadProductsPage();
+            }
+        }
+
+        function showLogin() {
+            showPage('login');
+        }
+
+        function showRegister() {
+            showPage('register');
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            updateNavigation();
+            showPage('home');
+            
+            Swal.fire({
+                title: 'Logged Out',
+                text: 'You have been successfully logged out.',
+                icon: 'success',
+                timer: 2000
+            });
+        }
+
+        function updateNavigation() {
+            const loginNav = document.getElementById('login-nav');
+            const logoutNav = document.getElementById('logout-nav');
+            
+            if (currentUser) {
+                loginNav.style.display = 'none';
+                logoutNav.style.display = 'block';
+            } else {
+                loginNav.style.display = 'block';
+                logoutNav.style.display = 'none';
+            }
+        }
+
+        // Cart functions
+        function updateCartCount() {
+            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = cartCount;
+        }
+
+        function addToCart(productId) {
+            if (!currentUser) {
+                Swal.fire({
+                    title: 'Login Required',
+                    text: 'Please login to add items to cart.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Login',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        showPage('login');
+                    }
+                });
+                return;
+            }
+
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            // Check if product is in stock
+            if (!product.inStock) {
+                Swal.fire({
+                    title: 'Out of Stock',
+                    text: 'This product is currently out of stock.',
+                    icon: 'warning'
+                });
+                return;
+            }
+
+            const existingItem = cart.find(item => item.id === product.id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                // Create new cart item object with enhanced product data
+                const cartItem = {
+                    id: product.id,
+                    title: product.title,
+                    price: product.price,
+                    image: product.image,
+                    quantity: 1,
+                    brand: product.brand,
+                    description: product.description,
+                    category: product.category
+                };
+                cart.push(cartItem);
+            }
+            
+            // Update localStorage with cart data
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // Update cart count using DOM manipulation
+            updateCartCount();
+            
+            // Update the button state using DOM manipulation
+            const addButton = event.target;
+            const originalContent = addButton.innerHTML;
+            const originalClass = addButton.className;
+            
+            // Change button appearance temporarily
+            addButton.innerHTML = '<i class="fas fa-check me-1"></i>Added!';
+            addButton.className = 'btn btn-success w-100';
+            addButton.disabled = true;
+            
+            // Show success notification
+            Swal.fire({
+                title: 'Added to Cart!',
+                text: `${product.title} has been added to your cart.`,
+                icon: 'success',
+                timer: 2000
+            });
+            
+            // Reset button after 2 seconds
+            setTimeout(() => {
+                addButton.innerHTML = originalContent;
+                addButton.className = originalClass;
+                addButton.disabled = false;
+            }, 2000);
+        }
+
+        function showCart() {
+            const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+            renderCartItems();
+            cartModal.show();
+        }
+
+        function renderCartItems() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const subtotalElement = document.getElementById('subtotal');
+            const shippingElement = document.getElementById('shipping');
+            const totalElement = document.getElementById('total');
+            
+            // Clear existing content using DOM manipulation
+            cartItemsContainer.innerHTML = '';
+            
+            if (cart.length === 0) {
+                // Create empty cart message using DOM manipulation
+                const emptyMessage = document.createElement('div');
+                emptyMessage.className = 'text-center text-muted py-4';
+                emptyMessage.innerHTML = '<i class="fas fa-shopping-cart fa-3x mb-3"></i><p>Your cart is empty</p>';
+                cartItemsContainer.appendChild(emptyMessage);
+                
+                // Update totals using DOM manipulation
+                subtotalElement.textContent = '$0.00';
+                shippingElement.textContent = '$0.00';
+                totalElement.textContent = '$0.00';
+                return;
+            }
+            
+            let subtotal = 0;
+            
+            // Create cart items using DOM manipulation
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                
+                // Create cart item container
+                const cartItemDiv = document.createElement('div');
+                cartItemDiv.className = 'cart-item';
+                cartItemDiv.setAttribute('data-product-id', item.id);
+                
+                // Create row container
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'row align-items-center';
+                
+                // Create image column
+                const imageCol = document.createElement('div');
+                imageCol.className = 'col-md-2';
+                const image = document.createElement('img');
+                image.src = item.image;
+                image.alt = item.title;
+                image.className = 'img-fluid rounded';
+                imageCol.appendChild(image);
+                
+                // Create details column
+                const detailsCol = document.createElement('div');
+                detailsCol.className = 'col-md-4';
+                const title = document.createElement('h6');
+                title.textContent = item.title;
+                const price = document.createElement('p');
+                price.className = 'text-muted mb-0';
+                price.textContent = `$${item.price.toFixed(2)}`;
+                const brand = document.createElement('small');
+                brand.className = 'text-secondary';
+                brand.textContent = item.brand || '';
+                detailsCol.appendChild(title);
+                detailsCol.appendChild(price);
+                detailsCol.appendChild(brand);
+                
+                // Create quantity controls column
+                const quantityCol = document.createElement('div');
+                quantityCol.className = 'col-md-3';
+                const quantityControls = document.createElement('div');
+                quantityControls.className = 'quantity-controls';
+                
+                const minusBtn = document.createElement('button');
+                minusBtn.className = 'quantity-btn';
+                minusBtn.textContent = '-';
+                minusBtn.onclick = () => updateQuantity(item.id, -1);
+                
+                const quantityInput = document.createElement('input');
+                quantityInput.type = 'text';
+                quantityInput.className = 'quantity-input';
+                quantityInput.value = item.quantity;
+                quantityInput.readOnly = true;
+                
+                const plusBtn = document.createElement('button');
+                plusBtn.className = 'quantity-btn';
+                plusBtn.textContent = '+';
+                plusBtn.onclick = () => updateQuantity(item.id, 1);
+                
+                quantityControls.appendChild(minusBtn);
+                quantityControls.appendChild(quantityInput);
+                quantityControls.appendChild(plusBtn);
+                quantityCol.appendChild(quantityControls);
+                
+                // Create total column
+                const totalCol = document.createElement('div');
+                totalCol.className = 'col-md-2';
+                const totalPrice = document.createElement('p');
+                totalPrice.className = 'mb-0 fw-bold';
+                totalPrice.textContent = `$${itemTotal.toFixed(2)}`;
+                totalCol.appendChild(totalPrice);
+                
+                // Create remove button column
+                const removeCol = document.createElement('div');
+                removeCol.className = 'col-md-1';
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'btn btn-outline-danger btn-sm';
+                removeBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                removeBtn.onclick = () => removeFromCart(item.id);
+                removeCol.appendChild(removeBtn);
+                
+                // Append all columns to row
+                rowDiv.appendChild(imageCol);
+                rowDiv.appendChild(detailsCol);
+                rowDiv.appendChild(quantityCol);
+                rowDiv.appendChild(totalCol);
+                rowDiv.appendChild(removeCol);
+                
+                // Append row to cart item
+                cartItemDiv.appendChild(rowDiv);
+                
+                // Append cart item to container
+                cartItemsContainer.appendChild(cartItemDiv);
+            });
+            
+            // Calculate totals
+            const shipping = subtotal > 0 ? 15.00 : 0;
+            const total = subtotal + shipping;
+            
+                // Update totals using DOM manipulation
+                subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
+                shippingElement.textContent = `$${shipping.toFixed(2)}`;
+                totalElement.textContent = `$${total.toFixed(2)}`;
+        }
+
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    updateCartCount();
+                    renderCartItems();
+                }
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            renderCartItems();
+            
+            Swal.fire({
+                title: 'Removed',
+                text: 'Item has been removed from cart.',
+                icon: 'success',
+                timer: 1500
+            });
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                Swal.fire({
+                    title: 'Empty Cart',
+                    text: 'Your cart is empty. Add some items first!',
+                    icon: 'warning'
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: 'Checkout Complete!',
+                text: 'Thank you for your purchase. Your order has been placed.',
+                icon: 'success',
+                confirmButtonText: 'Continue Shopping'
+            }).then(() => {
+                cart = [];
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+                renderCartItems();
+                bootstrap.Modal.getInstance(document.getElementById('cartModal')).hide();
+            });
+        }
+
+        // Product rendering functions using DOM manipulation
+        function renderProductCard(product) {
+            // Create main product card container
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
+            
+            // Create discount badge
+            const badge = document.createElement('div');
+            badge.className = 'product-badge';
+            badge.textContent = `${product.discount}% OFF`;
+            
+            // Create product image container
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'product-image';
+            const image = document.createElement('img');
+            image.src = product.image;
+            image.alt = product.title;
+            imageContainer.appendChild(image);
+            
+            // Create card body
+            const cardBody = document.createElement('div');
+            cardBody.className = 'card-body';
+            
+            // Create product title
+            const title = document.createElement('h6');
+            title.className = 'card-title';
+            title.textContent = product.title;
+            
+            // Create price container
+            const priceContainer = document.createElement('div');
+            priceContainer.className = 'mb-2';
+            const currentPrice = document.createElement('span');
+            currentPrice.className = 'h5 text-primary';
+            currentPrice.textContent = `$${product.price.toFixed(2)}`;
+            const oldPrice = document.createElement('small');
+            oldPrice.className = 'text-muted text-decoration-line-through ms-2';
+            oldPrice.textContent = `$${product.oldPrice.toFixed(2)}`;
+            priceContainer.appendChild(currentPrice);
+            priceContainer.appendChild(oldPrice);
+            
+            // Create rating container
+            const ratingContainer = document.createElement('div');
+            ratingContainer.className = 'mb-2';
+            const rating = document.createElement('div');
+            rating.className = 'text-warning';
+            rating.innerHTML = `${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))} <small class="text-muted ms-1">(${product.reviews})</small>`;
+            ratingContainer.appendChild(rating);
+            
+            // Create brand info
+            const brandInfo = document.createElement('div');
+            brandInfo.className = 'mb-2';
+            const brand = document.createElement('small');
+            brand.className = 'text-secondary';
+            brand.textContent = product.brand || '';
+            brandInfo.appendChild(brand);
+            
+            // Create add to cart button
+            const addButton = document.createElement('button');
+            addButton.className = 'btn btn-primary-custom w-100';
+            addButton.innerHTML = '<i class="fas fa-shopping-cart me-1"></i> Add to Cart';
+            addButton.onclick = () => addToCart(product.id);
+            
+            // Append all elements to card body
+            cardBody.appendChild(title);
+            cardBody.appendChild(priceContainer);
+            cardBody.appendChild(ratingContainer);
+            cardBody.appendChild(brandInfo);
+            cardBody.appendChild(addButton);
+            
+            // Append all elements to product card
+            productCard.appendChild(badge);
+            productCard.appendChild(imageContainer);
+            productCard.appendChild(cardBody);
+            
+            return productCard;
+        }
+
+        function loadHomePage() {
+            // Load featured products using DOM manipulation
+            const featuredContainer = document.getElementById('featured-products');
+            featuredContainer.innerHTML = '';
+            
+            products.slice(0, 6).forEach(product => {
+                const slideDiv = document.createElement('div');
+                slideDiv.className = 'swiper-slide';
+                slideDiv.appendChild(renderProductCard(product));
+                featuredContainer.appendChild(slideDiv);
+            });
+
+            // Load deals products using DOM manipulation
+            const dealsContainer = document.getElementById('deals-products');
+            dealsContainer.innerHTML = '';
+            
+            products.slice(6, 12).forEach(product => {
+                const slideDiv = document.createElement('div');
+                slideDiv.className = 'swiper-slide';
+                slideDiv.appendChild(renderProductCard(product));
+                dealsContainer.appendChild(slideDiv);
+            });
+
+            // Initialize swipers
+            if (featuredSwiper) featuredSwiper.destroy();
+            if (dealsSwiper) dealsSwiper.destroy();
+
+            featuredSwiper = new Swiper('.featured-swiper', {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                pagination: {
+                    el: '.featured-swiper .swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.featured-swiper .swiper-button-next',
+                    prevEl: '.featured-swiper .swiper-button-prev',
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 2,
+                    },
+                    768: {
+                        slidesPerView: 3,
+                    },
+                    1024: {
+                        slidesPerView: 4,
+                    },
+                },
+            });
+
+            dealsSwiper = new Swiper('.deals-swiper', {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                pagination: {
+                    el: '.deals-swiper .swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.deals-swiper .swiper-button-next',
+                    prevEl: '.deals-swiper .swiper-button-prev',
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 2,
+                    },
+                    768: {
+                        slidesPerView: 3,
+                    },
+                    1024: {
+                        slidesPerView: 4,
+                    },
+                },
+            });
+        }
+
+        function loadProductsPage() {
+            applyFilters();
+        }
+
+        function filterProducts(category) {
+            showPage('products');
+            document.getElementById('category-filter').value = category;
+            applyFilters();
+        }
+
+        // Navbar search functionality
+        function handleNavbarSearch(event) {
+            if (event.key === 'Enter') {
+                performNavbarSearch();
+            }
+        }
+
+        function performNavbarSearch() {
+            const searchTerm = document.getElementById('navbar-search').value.toLowerCase();
+            if (searchTerm.trim()) {
+                showPage('products');
+                // Clear other filters
+                document.getElementById('category-filter').value = '';
+                document.getElementById('price-filter').value = '';
+                document.getElementById('sort-filter').value = 'name-asc';
+                // Set search term
+                document.getElementById('search-input').value = searchTerm;
+                applyFilters();
+            }
+        }
+
+        function applyFilters() {
+            const categoryFilter = document.getElementById('category-filter').value;
+            const priceFilter = document.getElementById('price-filter').value;
+            const sortFilter = document.getElementById('sort-filter').value;
+            const searchInput = document.getElementById('search-input').value.toLowerCase();
+
+            const productCards = document.querySelectorAll('.product-card');
+            
+            productCards.forEach(card => {
+                const category = card.getAttribute('data-category');
+                const price = parseFloat(card.getAttribute('data-price'));
+                const title = card.querySelector('.card-title').textContent.toLowerCase();
+                
+                let show = true;
+                
+                // Category filter
+                if (categoryFilter && category !== categoryFilter) {
+                    show = false;
+                }
+                
+                // Price filter
+                if (priceFilter && show) {
+                    const [min, max] = priceFilter.split('-').map(p => p === '+' ? Infinity : parseFloat(p));
+                    if (price < min || (max !== Infinity && price > max)) {
+                        show = false;
+                    }
+                }
+                
+                // Search filter
+                if (searchInput && show && !title.includes(searchInput)) {
+                    show = false;
+                }
+                
+                // Show/hide card
+                card.style.display = show ? 'block' : 'none';
+            });
+
+            // Sort visible products
+            const visibleCards = Array.from(productCards).filter(card => card.style.display !== 'none');
+            const productsGrid = document.getElementById('products-grid');
+            
+            visibleCards.sort((a, b) => {
+                const priceA = parseFloat(a.getAttribute('data-price'));
+                const priceB = parseFloat(b.getAttribute('data-price'));
+                const ratingA = parseFloat(a.getAttribute('data-rating'));
+                const ratingB = parseFloat(b.getAttribute('data-rating'));
+                const titleA = a.querySelector('.card-title').textContent;
+                const titleB = b.querySelector('.card-title').textContent;
+                
+                switch (sortFilter) {
+                    case 'name-asc':
+                        return titleA.localeCompare(titleB);
+                    case 'name-desc':
+                        return titleB.localeCompare(titleA);
+                    default:
+                        return titleA.localeCompare(titleB);
+                }
+            });
+            
+            // Reorder cards in DOM
+            visibleCards.forEach(card => {
+                productsGrid.appendChild(card);
+            });
+        }
+
+        function clearFilters() {
+            document.getElementById('category-filter').value = '';
+            document.getElementById('price-filter').value = '';
+            document.getElementById('sort-filter').value = 'name-asc';
+            document.getElementById('search-input').value = '';
+            
+            // Show all products
+            const productCards = document.querySelectorAll('.product-card');
+            productCards.forEach(card => {
+                card.style.display = 'block';
+            });
+            
+            // Reset sort order
+            const productsGrid = document.getElementById('products-grid');
+            const allCards = Array.from(productCards);
+            allCards.sort((a, b) => {
+                const titleA = a.querySelector('.card-title').textContent;
+                const titleB = b.querySelector('.card-title').textContent;
+                return titleA.localeCompare(titleB);
+            });
+            
+            allCards.forEach(card => {
+                productsGrid.appendChild(card);
+            });
+        }
+
+        // Form handlers
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Simple validation (in real app, this would be server-side)
+            if (email && password) {
+                currentUser = { email, name: email.split('@')[0] };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                updateNavigation();
+                showPage('home');
+                
+                Swal.fire({
+                    title: 'Welcome!',
+                    text: `Hello ${currentUser.name}! You are now logged in.`,
+                    icon: 'success',
+                    timer: 2000
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Please fill in all fields.',
+                    icon: 'error'
+                });
+            }
+        });
+
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const confirmPassword = document.getElementById('reg-confirm-password').value;
+            
+            if (password !== confirmPassword) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Passwords do not match.',
+                    icon: 'error'
+                });
+                return;
+            }
+            
+            if (name && email && password) {
+                currentUser = { email, name };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                updateNavigation();
+                showPage('home');
+                
+                Swal.fire({
+                    title: 'Account Created!',
+                    text: `Welcome ${name}! Your account has been created successfully.`,
+                    icon: 'success',
+                    timer: 2000
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Please fill in all fields.',
+                    icon: 'error'
+                });
+            }
+        });
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateNavigation();
+            }
+            
+            // Update cart count
+            updateCartCount();
+            
+            // Load home page by default
+            loadHomePage();
+        });
+    </script>
+</body>
+</html>
